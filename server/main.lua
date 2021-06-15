@@ -5,11 +5,10 @@ TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
 RegisterServerEvent('giveLicense:GetInformation')
 AddEventHandler('giveLicense:GetInformation', function(closestPlayer, licenseStatus)
     local xPlayer = ESX.GetPlayerFromId(source)
-    local xPlayerId = source
     local xPlayerName = xPlayer.getName()
     local yPlayer = ESX.GetPlayerFromId(closestPlayer)
-    xPlayer.triggerEvent('giveLicense:ShowLicense', xPlayerId, xPlayerName, licenseStatus)
-    yPlayer.triggerEvent('giveLicense:ShowLicense', xPlayerId, xPlayerName, licenseStatus)
+    TriggerClientEvent('giveLicense:ShowLicense', closestPlayer, source, xPlayerName, licenseStatus)
+    TriggerClientEvent('giveLicense:ShowLicense', source, source, xPlayerName, licenseStatus)
 end)
 
 RegisterServerEvent('giveLicense:ViewLicense')

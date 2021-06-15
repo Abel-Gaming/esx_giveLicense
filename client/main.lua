@@ -1,5 +1,4 @@
 ESX              = nil
-local setLicenseStatus = nil
 
 Citizen.CreateThread(function()
 	while ESX == nil do
@@ -20,11 +19,13 @@ end)
 -- Commands
 RegisterCommand("give-license", function(source, args)
 	local status = args[1]
-	local closestPlayer, closestPlayerDistance = ESX.Game.GetClosestPlayer()
+	local closestPlayer, closestPlayerDistance = ESX.Game.GetClosestPlayer(GetEntityCoords(PlayerPedId()))
 	if closestPlayer == -1 or closestPlayerDistance > 3.0 then
     	ESX.ShowNotification('There\'s no player near you to give your license to!')
 	else
-    	TriggerServerEvent('giveLicense:GetInformation', closestPlayer, status)
+		local closestPlayerID = GetPlayerServerId(closestPlayer)
+		print(closestPlayerID)
+    	TriggerServerEvent('giveLicense:GetInformation', closestPlayerID, status)
 	end
 end, false)
 
@@ -36,6 +37,8 @@ end, false)
 -- Events
 RegisterNetEvent('giveLicense:ShowLicense')
 AddEventHandler('giveLicense:ShowLicense', function(driverId, driverName, driverStatus)
+	lastLicenseName = driverName
+	lastLicenseStatus = driverStatus
 	notification(driverId, driverName, driverStatus)
 end)
 
